@@ -292,7 +292,7 @@
            
            /***********************************static methods***********************************/
            
-           /* static method to get venue by email
+           /* static method to get venue by contactId
             * input: (pointer) mysqli
             * input: (string) $key contactId to search by
             * output: (object) venue */
