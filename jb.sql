@@ -73,11 +73,11 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`venue` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`venue` (
-  `idVenue` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idvenue` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `longitude` DECIMAL(9,6) NOT NULL,
   `latitude` DECIMAL(9,6) NOT NULL,
   `contactId` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`idVenue`),
+  PRIMARY KEY (`idvenue`),
   INDEX `contactId_idx` (`contactId` ASC),
   CONSTRAINT `contactId`
     FOREIGN KEY (`contactId`)
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`boardLocation` (
   INDEX `venueId_idx` (`venueId` ASC),
   CONSTRAINT `venueId`
     FOREIGN KEY (`venueId`)
-    REFERENCES `mydb`.`venue` (`idVenue`)
+    REFERENCES `mydb`.`venue` (`idvenue`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
