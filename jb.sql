@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`client` (
   `contactId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`idclient`),
   INDEX `contactId_idx` (`contactId` ASC),
-  CONSTRAINT `contactId`
+  CONSTRAINT `contactId_client`
     FOREIGN KEY (`contactId`)
     REFERENCES `mydb`.`contact` (`idcontact`)
     ON DELETE RESTRICT
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`venue` (
   `contactId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`idVenue`),
   INDEX `contactId_idx` (`contactId` ASC),
-  CONSTRAINT `contactId`
+  CONSTRAINT `contactId_venue`
     FOREIGN KEY (`contactId`)
     REFERENCES `mydb`.`contact` (`idcontact`)
     ON DELETE RESTRICT
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`boardLocation` (
   `venueId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`idBoardLocation`),
   INDEX `venueId_idx` (`venueId` ASC),
-  CONSTRAINT `venueId`
+  CONSTRAINT `venueId_boardLocation`
     FOREIGN KEY (`venueId`)
     REFERENCES `mydb`.`venue` (`idVenue`)
     ON DELETE RESTRICT
@@ -118,17 +118,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`adPlacement` (
   PRIMARY KEY (`clientId`, `boardId`),
   INDEX `contactId_idx` (`contactId` ASC),
   INDEX `boardId_idx` (`boardId` ASC),
-  CONSTRAINT `clientId`
+  CONSTRAINT `clientId_adPlacement`
     FOREIGN KEY (`clientId`)
     REFERENCES `mydb`.`client` (`idclient`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
-  CONSTRAINT `boardId`
+  CONSTRAINT `boardId_adPlacement`
     FOREIGN KEY (`boardId`)
     REFERENCES `mydb`.`board` (`idboard`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
-  CONSTRAINT `contactId`
+  CONSTRAINT `contactId_adPlacement`
     FOREIGN KEY (`contactId`)
     REFERENCES `mydb`.`contact` (`idcontact`)
     ON DELETE RESTRICT
@@ -160,12 +160,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`poster` (
   PRIMARY KEY (`idposter`),
   INDEX `contactId_idx` (`contactId` ASC),
   INDEX `posterType_idx` (`posterType` ASC),
-  CONSTRAINT `contactId`
+  CONSTRAINT `contactId_poster`
     FOREIGN KEY (`contactId`)
     REFERENCES `mydb`.`contact` (`idcontact`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
-  CONSTRAINT `posterType`
+  CONSTRAINT `posterType_poster`
     FOREIGN KEY (`posterType`)
     REFERENCES `mydb`.`type` (`idtype`)
     ON DELETE RESTRICT
@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`printer` (
   `contactId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`idprinter`),
   INDEX `contactId_idx` (`contactId` ASC),
-  CONSTRAINT `contactId`
+  CONSTRAINT `contactId_printer`
     FOREIGN KEY (`contactId`)
     REFERENCES `mydb`.`contact` (`idcontact`)
     ON DELETE RESTRICT
