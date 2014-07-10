@@ -3,15 +3,11 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/ad_placement.php");
+	require_once("/var/www/html/php/classses/ad_placement.php");
         
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
 	
 	class AdPlacementTest extends UnitTestCase
-	{
-		private $mysqli = null;
-            
+	{   
 		// variable to hold the mysqli objects
 		private $sqlAdPlacement;
 		private $ad;
@@ -22,24 +18,20 @@
 		private $boardId = 10;
 		private $contactId =5;
             
-		
-		 // setup() is before *EACH test           
+		// setup() is before *EACH test  
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->ad = new Ad (-1, $this->clientId, $this->boardId, $this->contactId);			
-				$this->ad->insert($this->mysqli);
+				$this->mysqli = new mysqli("216.184.30.27","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
-		}
+		}         
+		
 			//then assert, this was called ok() in qunit  
 		public function testGetAdsByClientId()
 		{
