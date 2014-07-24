@@ -63,7 +63,7 @@
 		
 			// verify the title and details changed
 			$this->assertIdentical($this->sqlBoard->getBoardStatus(), $newStatus);
-            }
+		}
             
             // teardown
             public function tearDown()
