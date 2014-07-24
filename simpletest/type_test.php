@@ -27,8 +27,8 @@
 				
 				//insert the object
 				//type -- idtype, name
-				$type = new Type(-1,$this->name);
-				$type->insert($this->mysqli);
+				$this->type = new Type(-1,$this->name);
+				$this->type->insert($this->mysqli);
 				
 			}
 			catch(mysqli_sql_exception $exception)

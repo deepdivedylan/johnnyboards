@@ -97,7 +97,7 @@
             }
             
             // a create a query template
-            $query = "INSERT INTO type(idtype, name) VALUES(?, ?)";
+            $query = "INSERT INTO type(name) VALUES(?)";
             
             // prepare the query statement
             $statement = $mysqli->prepare($query);
@@ -107,7 +107,7 @@
             }
             
             // bind parameters to the query template
-            $wasClean = $statement->bind_param("is", $this->idtype, $this->name);
+            $wasClean = $statement->bind_param("s", $this->name);
             if($wasClean === false)
             {
                 throw(new Exception("Unable to bind paramenters."));
