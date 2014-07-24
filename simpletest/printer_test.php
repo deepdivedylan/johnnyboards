@@ -44,6 +44,7 @@
 				$this->contact->insert($this->mysqli);
 				
 				$this->printer = new Printer(-1, $this->hoursOpen, $this->longitude, $this->latitude, $this->areasCovered, $this->contact->getIdcontact());
+				$this->printer->insert($this->mysqli);
 			}
 			catch(mysqli_sql_exception $exception)
 			{
@@ -106,6 +107,7 @@
             public function tearDown()
             {
                 $this->printer->delete($this->mysqli);
+		$this->contact->delete($this->mysqli);
             }
         }
 ?>

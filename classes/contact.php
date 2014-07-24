@@ -465,7 +465,7 @@
             * input: (pointer) mysqli
             * input: (string) $key email to search by
             * output: (object) contact */
-           public static function getUserByEmail(&$mysqli, $email)
+           public static function getContactByEmail(&$mysqli, $email)
            {
                    //handle degenerate cases
                    if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")

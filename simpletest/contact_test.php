@@ -43,6 +43,8 @@
 			try
 			{
 				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
+				$this->contact = new Contact(-1, $this->companyName, $this->address1, $this->address2, $this->city, $this->zipcode, $this->state, $this->phoneNumber, $this->email);
+				$this->contact->insert($this->mysqli);
 			}
 			catch(mysqli_sql_exception $exception)
 			{
@@ -50,18 +52,30 @@
 			}
 		}
 			//then assert, this was called ok() in qunit  
-		public function testGetContactsByIdContact()
+		public function testGetContactsById()
 		{
-			$this->$sqlContact = Contact::getContactsByIdContact($this->mysqli, $this->idcontact);
-			$this->assertIdentical($this->contact, $this->$sqlContact[0]);
+			$this->sqlContact = Contact::getContactById($this->mysqli, $this->contact->getIdcontact());
+			$this->assertIdentical($this->contact, $this->sqlContact);
 		}
 			//setup your expectations
-		public function testGetContactsByIdContactInvalid()
+		public function testGetContactsByIdInvalid()
 		{
 			$this->expectException("Exception");
-			@Contact::getContactsByIdContact($this->mysqli, 0);
+			@Contact::getContactsById($this->mysqli, 0);
 		}
      
+		public function testGetContactsByEmail()
+		{
+			$this->sqlContact = Contact::getContactByEmail($this->mysqli, $this->email);
+			$this->assertIdentical($this->contact, $this->sqlContact);
+		}
+			//setup your expectations
+		public function testGetContactsByEmailInvalid()
+		{
+			$this->expectException("Exception");
+			@Contact::getContactsByEmail($this->mysqli, "josh@joshy.com");
+		}
+		
 		public function testValidUpdateContact()
 		{	
 			$newIdContact = "JB contacts are better";
@@ -69,13 +83,13 @@
 			$newAddress1 = "Just ask me and I'll tell you.";
 			$newAddress2= "Just ask me and I'll tell you.";
 			$newCity= "Just ask me and I'll tell you.";
-			$newZipCode= "Just ask me and I'll tell you.";
-			$newPhoneNumber= "Just ask me and I'll tell you.";
+			$newZipCode= "98888";
+			$newPhoneNumber= "911-911-9111";
 			$newEmail= "Just ask me and I'll tell you.";
 			
 			
 			$this->contact->setIdContact($newIdContact);
-			$this->contact->setCompanyName 		($newCompanyName 		);
+			$this->contact->setCompanyName($newCompanyName);
 			$this->contact->setAddress1($newAddress1);
 			$this->contact->setAddress2($newAddress2);
 			$this->contact->setCity($newCity);
@@ -86,17 +100,16 @@
 			
 											
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlContact = Contact::getContactByIdContact($this->mysqli, $this->idcontact);
+			$this->sqlContact = Contact::getContactById($this->mysqli, $this->contact->getIdcontact());
 		
 			// verify the IdContact , CompanyName , Address1,Address2, City , zipCode, PhoneNumebr and Email changed
-			$this->assertIdentical($this->sqlContact[0]->getIdContact(), $newIdContact);
-			$this->assertIdentical($this->sqlContact[0]->getCompanyName (), $newCompanyName);
-			$this->assertIdentical($this->sqlContact[0]->getAdress1(), $newAddress1);
-			$this->assertIdentical($this->sqlContact[0]->getAddress2(), $newAddress2);
-			$this->assertIdentical($this->sqlContact[0]->getCity(), $newCity);
-			$this->assertIdentical($this->sqlContact[0]->getZipCode(), $newZipCode);
-			$this->assertIdentical($this->sqlContact[0]->getPhoneNumber(), $newPhoneNumber);
-			$this->assertIdentical($this->sqlContact[0]->getEmail(), $newEmail);
+			$this->assertIdentical($this->sqlContact->getIdContact(), $newIdContact);
+			$this->assertIdentical($this->sqlContact->getCompanyName (), $newCompanyName);
+			$this->assertIdentical($this->sqlContact->getAdress1(), $newAddress1);
+			$this->assertIdentical($this->sqlContact->getAddress2(), $newAddress2);
+			$this->assertIdentical($this->sqlContact->getCity(), $newCity);
+			$this->assertIdentical($this->sqlContact->getPhoneNumber(), $newPhoneNumber);
+			$this->assertIdentical($this->sqlContact->getEmail(), $newEmail);
             }
             
             // teardown

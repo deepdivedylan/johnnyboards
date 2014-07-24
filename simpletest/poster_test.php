@@ -37,6 +37,7 @@
 				$this->contact->insert($this->mysqli);
 				
 				$this->poster = new Poster(-1, $this->posterType, $this->contact->getIdcontact());
+				$this->poster->insert($this->mysqli);
 			}
 			catch(mysqli_sql_exception $exception)
 			{
@@ -100,6 +101,7 @@
             public function tearDown()
             {
                 $this->poster->delete($this->mysqli);
+		$this->contact->delete($this->mysqli);
             }
         }
 ?>
