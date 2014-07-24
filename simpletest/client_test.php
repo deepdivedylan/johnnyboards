@@ -10,15 +10,15 @@
 		// variable to hold the mysqli objects
 		private $sqlClient;
 		private $client;
+		private $contact;
             
 		// constant variables to reuse. set interger or string
 		 /*member variables
-             *input: (integer) idclient
+             *input: (integer) idclient -- w/new object will be assigned as -1 
              *input: (string) contract start
              *input: (string) contract renew
              *input: (integer) client type
              *input: (string) contactId*/
-		private $idclient; // this is assigned as -1
 		private $contractStart = "12-12-2012";
 		private $contractRenew= "12-12-2013";
 		private $clientType = 10;
@@ -32,38 +32,62 @@
 			try
 			{
 				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
+				//insert the objects
+				//contact -- idcontact, company name, address1, address2, city, zip, nm, phone
+				$this->contact = new Contact(-1, "11 Online", "832 Madison NE", "", "Albuquerque", "87110", "NM", "505-363-4106", "josh@joshuatomasgarcia.com");
+				$this->contact->insert($this->mysqli);
+				//get contactid
+				$this->contactId = $this->contact->getIdcontact();
+				
+				
+				//client -- idclient, contractstartdate, contractenddate, clientype, contactid
+				$this->client = new Client(-1, "12-12-2012", "12-12-2013", 10, $this->contactId);
+				$this->client->insert($this->mysqli);
+				
 			}
 			catch(mysqli_sql_exception $exception)
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
-			//then assert, this was called ok() in qunit  
-		public function testGetClientsByIdClient()
+		//test that the objects were inserted correctly & that the the static methods return the correct data
+		//
+		public function testGetClientByClientId()
 		{
-			$this->$sqlClient = Client::getClientsByIdClient($this->mysqli, $this->idclient);
-			$this->assertIdentical($this->client, $this->$sqlClient[0]);
+			$this->sqlClient = Client::getClientById($this->mysqli, $this->client->getIdclient());
+			$this->assertIdentical($this->client, $this->sqlClient);
 		}
-			//setup your expectations
+
 		public function testGetClientsByIdClientInvalid()
 		{
 			$this->expectException("Exception");
-			@Client::getClientsByIdClient($this->mysqli, 0);
+			@Client::getClientById($this->mysqli, 0);
+		}
+		
+		public function testGetClientByContactId()
+		{
+			$this->sqlClient = Client::getClientByContactId($this->mysqli, $this->contactId);
+			$this->assertIdentical($this->client, $this->sqlClient);
+		}
+	
+		public function testGetClientsByContactIdInvalid()
+		{
+			$this->expectException("Exception");
+			@Client::getClientByContactId($this->mysqli, 0);
 		}
      
 		public function testValidUpdateClient()
 		{	
-			$newIdClient = "JB clients are better";
-			$newContractStart = "Just ask me and I'll tell you.";
-			$newContractRenew = "Just ask me and I'll tell you.";
-			$newClientType= "Just ask me and I'll tell you.";
-			$newContractId= "Just ask me and I'll tell you.";
+			$newContractStart = "01-01-1980";
+			$newContractRenew = "06-13-1990";
+			$newClientType= 5;
+			$newContactId= $this->contactId;
 			
-			$this->client->setIdClient($newIdClient);
 			$this->client->setContractStart($newContractStart);
 			$this->client->setContractRenew($newContractRenew);
 			$this->client->setClientType($newClientType);
-			$this->client->setClientId($newClientId);
+			$this->client->setContactId($newContactId);
+			$this->client->setClientId($clientId);
 			$this->client->update($this->mysqli);
 			
 			
@@ -72,17 +96,18 @@
 			$this->sqlClient = Client::getClientByIdClient($this->mysqli, $this->idclient);
 		
 			// verify the IdClient , ContractStart, ContractRenew,ClientType ContractId changed
-			$this->assertIdentical($this->sqlClient[0]->getIdClient(), $newIdClient);
-			$this->assertIdentical($this->sqlClient[0]->getContractStart(), $newContractStart);
-			$this->assertIdentical($this->sqlClient[0]->getContractRenew(), $newContractRenew);
-			$this->assertIdentical($this->sqlClient[0]->getClientType(), $newClientType);
-			$this->assertIdentical($this->sqlClient[0]->getClientId(), $newClientId);
+			$this->assertIdentical($this->sqlClient->getIdClient(), $newIdClient);
+			$this->assertIdentical($this->sqlClient->getContractStart(), $newContractStart);
+			$this->assertIdentical($this->sqlClient->getContractRenew(), $newContractRenew);
+			$this->assertIdentical($this->sqlClient->getClientType(), $newClientType);
+			$this->assertIdentical($this->sqlClient->getClientId(), $newClientId);
             }
             
             // teardown
             public function tearDown()
             {
-                $this->client->delete($this->mysqli);
+                $this->contact->delete($this->mysqli);
+		$this->client->delete($this->mysqli);
             }
         }
 ?>
