@@ -27,12 +27,21 @@
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
+			$this->board = new Board(-1, $this->boardStatus);
+			try
+			{
+			$this->board->insert($this->mysqli);
+			}
+			catch(Exception $exception)
+			{
+				echo $exception;
+			}
 		}   
             
 		public function testGetBoardsByUserId()
 		{
-			$this->$sqlBoard = Board::getBoardsByUserId($this->mysqli, $this->userId);
-			$this->assertIdentical($this->job, $this->$sqlBoard[0]);
+			$this->$sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
+			$this->assertIdentical($this->board, $this->sqlBoard);
 		}
 
 		public function testGetBoardsByUserIdInvalid()
@@ -43,18 +52,15 @@
      
 		public function testValidUpdateBoard()
 		{	
-			$newTitle = "HTML is better";
-			$newDetails = "Just ask me and I'll tell you.";
-			$this->board->setTitle($newTitle);
-			$this->board->setDetails($newDetails);
+			$newStatus = "Fair";
+			$this->board->setBoardStatus($newStatus);
 			$this->board->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlBoard = Board::getBoardByUserId($this->mysqli, $this->userId);
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->userId);
 		
 			// verify the title and details changed
-			$this->assertIdentical($this->sqlBoard[0]->getTitle(), $newTitle);
-			$this->assertIdentical($this->sqlBoard[0]->getDetails(), $newDetails);
+			$this->assertIdentical($this->sqlBoard->getStatus(), $newStatus);
             }
             
             // teardown
