@@ -12,11 +12,10 @@
 		private $type;
             
 		/* state (member) variables
-		 * input: (int) new Id
+		 * input: (int) new Id -- no variable b/c is it never called in test
 		 * input: (string) name
 		 * throws: when invalid input detected */
-		private $id; // this is set to -1 
-		private $name;
+		private $name = "Valid Name";
 		 
 		 // setup() is before *EACH test           
 		public function setUp()
@@ -28,40 +27,53 @@
 				
 				//insert the object
 				//type -- idtype, name
-				$board = new Board(-1, "Good");
-				$board->insert($this->mysqli);
-				$boardId = $board->getIdboard();
+				$type = new Type(-1,$this->name);
+				$type->insert($this->mysqli);
+				
 			}
 			catch(mysqli_sql_exception $exception)
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
-			//then assert, this was called ok() in qunit  
-		public function testGetTypesByName()
+		//first we are going to test that the object is in the db and that the static methods are working with assert identical
+		//Test valid and invalud getPosterTypeById
+		public function testGetPosterTypeById()
 		{
-			$this->$sqlType = Type::getTypesByName($this->mysqli, $this->name);
-			$this->assertIdentical($this->type, $this->$sqlType[0]);
+			$this->$sqlType = Type::getPosterTypeById($this->mysqli, $this->board->getIdtype());
+			$this->assertIdentical($this->type, $this->sqlType);
 		}
-			//setup your expectations
-		public function testGetTypesByNameInvalid()
+
+		public function testGetPosterTypeByIdInvalid()
 		{
 			$this->expectException("Exception");
-			@Type::getTypesByName($this->mysqli, 0);
+			@Type::getPosterTypeById($this->mysqli, 0);
+		}
+		
+		//Test valid and invalud getPosterTypeByName
+		public function testGetPosterTypeByName()
+		{
+			$this->$sqlType = Type::getPosterTypeByName($this->mysqli, $this->name);
+			$this->assertIdentical($this->type, $this->sqlType);
+		}
+
+		public function testGetPosterTypeByNameInvalid()
+		{
+			$this->expectException("Exception");
+			@Type::getPosterTypeByName($this->mysqli, "Invalid Name");
 		}
      
 		public function testValidUpdateType()
 		{	
-			$newName = "JB types are better";
-			$newTypeStatus = "Just ask me and I'll tell you.";
+			$newName = "New Name";
 			$this->type->setName($newName);
 			$this->type->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlType = Type::getTypeByName($this->mysqli, $this->name);
+			$this->sqlType = Type::getPosterTypeByName($this->mysqli, $this->name);
 		
 			// verify the Name changed
-			$this->assertIdentical($this->sqlType[0]->getName(), $newName);
+			$this->assertIdentical($this->sqlType->getName(), $newName);
 			
             }
             

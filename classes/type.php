@@ -5,7 +5,7 @@
 		private $idtype;
 		private $name;
 		
-		/* constructor for a printer object
+		/* constructor for a type object
 		 * input: (int) new Id
 		 * input: (string) name
 		 * throws: when invalid input detected */
