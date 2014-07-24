@@ -40,7 +40,7 @@
 		//Test valid and invalud getPosterTypeById
 		public function testGetPosterTypeById()
 		{
-			$this->$sqlType = Type::getPosterTypeById($this->mysqli, $this->board->getIdtype());
+			$this->$sqlType = Type::getPosterTypeById($this->mysqli, $this->type->getIdtype());
 			$this->assertIdentical($this->type, $this->sqlType);
 		}
 
