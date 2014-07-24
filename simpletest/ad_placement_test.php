@@ -31,24 +31,24 @@
 				
 				//insert the objects
 				//contact -- idcontact, company name, address1, address2, city, zip, nm, phone
-				$contact = new Contact(-1, "11 Online", "832 Madison NE", "", "Albuquerque", "87110", "NM", "505-363-4106", "josh@joshuatomasgarcia.com");
-				$contact->insert($this->mysqli);
+				$this->contact = new Contact(-1, "11 Online", "832 Madison NE", "", "Albuquerque", "87110", "NM", "505-363-4106", "josh@joshuatomasgarcia.com");
+				$this->contact->insert($this->mysqli);
 				//get contactid
-				$contactId = $contact->getIdcontact();
+				$this->contactId = $this->contact->getIdcontact();
 				
 				//client -- idclient, contractstartdate, contractenddate, clientype, contactid
-				$client = new Client(-1, "12-12-2012", "12-12-2013", 10, $contactId);
-				$client->insert($this->mysqli);
-				$clientId = $client->getIdclient();
+				$this->client = new Client(-1, "12-12-2012", "12-12-2013", 10, $this->contactId);
+				$this->client->insert($this->mysqli);
+				$this->clientId = $this->client->getIdclient();
 				
 				//board -- idboard, boardstatus
-				$board = new Board(-1, "Good");
-				$board->insert($this->mysqli);
-				$boardId = $board->getIdboard();
+				$this->board = new Board(-1, "Good");
+				$this->board->insert($this->mysqli);
+				$this->boardId = $this->board->getIdboard();
 				
 				//create and insert the ad placement object
-				$ad = new AdPlacement($this->clientId, $this->contactId, $this->boardId);
-				$ad->insert($this->mysqli);
+				$this->ad = new AdPlacement($this->clientId, $this->contactId, $this->boardId);
+				$this->ad->insert($this->mysqli);
 			}
 			catch(mysqli_sql_exception $exception)
 			{
