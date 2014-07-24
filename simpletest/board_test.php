@@ -59,10 +59,10 @@
 			$this->board->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard());
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
 		
 			// verify the title and details changed
-			$this->assertIdentical($this->sqlBoard->getStatus(), $newStatus);
+			$this->assertIdentical($this->sqlBoard->getBoardStatus(), $newStatus);
             }
             
             // teardown
