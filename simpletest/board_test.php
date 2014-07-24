@@ -68,7 +68,7 @@
             // teardown
             public function tearDown()
             {
-                $this->board->delete($this->mysqli);
+                $this->sqlBoard->delete($this->mysqli);
             }
         }
 ?>
