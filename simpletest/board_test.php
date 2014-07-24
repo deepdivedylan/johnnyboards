@@ -47,7 +47,7 @@
 		public function testGetBoardsByUserIdInvalid()
 		{
 			$this->expectException("Exception");
-			@Board::getBoardsByUserId($this->mysqli, 0);
+			@Board::getBoardById($this->mysqli, 0);
 		}
      
 		public function testValidUpdateBoard()
