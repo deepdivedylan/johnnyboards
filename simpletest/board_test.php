@@ -12,6 +12,7 @@
 		private $board;
             
 		// constant variables to reuse
+		private $idboard;
 		private $boardStatus = "Good";
 		            
 		// setup() is before *EACH test  
@@ -26,14 +27,22 @@
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
-			$this->board = new Board(-1, $this->boardStatus);
-			$this->board->insert($this->mysqli);
+			try
+			{
+				$this->board = new Board(-1, $this->boardStatus);
+				$this->board->insert($this->mysqli);
+				$this->idboard = $this->board->getIdboard();
+				echo $this->idboard;
+			}
+			catch(Exception $exception)
+			{
+				echo $exception;
+			}
 		}   
             
 		public function testGetBoardsById()
 		{
-			$id = $this->board->getIdboard();
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $id);
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
 			$this->assertIdentical($this->board, $this->sqlBoard);
 		}
 
@@ -45,13 +54,12 @@
      
 		public function testValidUpdateBoard()
 		{	
-			$id = $this->board->getIdboard();
 			$newStatus = "Fair";
 			$this->board->setBoardStatus($newStatus);
 			$this->board->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $id);
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
 		
 			// verify the title and details changed
 			$this->assertIdentical($this->sqlBoard->getBoardStatus(), $newStatus);
