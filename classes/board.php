@@ -263,6 +263,7 @@
                    $result = $statement->get_result();
                    if($result === false || $result->num_rows !== 1)
                    {
+                           echo $result->num_rows;
                            throw(new Exception("Unable to determine board: id not found"));
                    }
                    

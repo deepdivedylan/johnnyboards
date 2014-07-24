@@ -27,9 +27,9 @@
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
-			$this->board = new Board(-1, $this->boardStatus);
 			try
 			{
+				$this->board = new Board(-1, $this->boardStatus);
 				$this->board->insert($this->mysqli);
 				$this->idboard = $this->board->getIdboard();
 				echo $this->idboard;
