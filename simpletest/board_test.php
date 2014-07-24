@@ -30,8 +30,9 @@
 			$this->board = new Board(-1, $this->boardStatus);
 			try
 			{
-			$this->board->insert($this->mysqli);
-			$this->idboard = $this->board->getIdboard();
+				$this->board->insert($this->mysqli);
+				$this->idboard = $this->board->getIdboard();
+				echo $this->idboard;
 			}
 			catch(Exception $exception)
 			{
@@ -39,13 +40,13 @@
 			}
 		}   
             
-		public function testGetBoardsByUserId()
+		public function testGetBoardsById()
 		{
-			$this->$sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard);
 			$this->assertIdentical($this->board, $this->sqlBoard);
 		}
 
-		public function testGetBoardsByUserIdInvalid()
+		public function testGetBoardsByIdInvalid()
 		{
 			$this->expectException("Exception");
 			@Board::getBoardById($this->mysqli, 0);
