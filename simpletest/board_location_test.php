@@ -81,6 +81,7 @@
 			$newVenueId = $this->venueId; //-- not testing this w/ new info for now b/c we would have to insert new Venue object
 			$this->location->setBoardLocation($newBoardLocation);
 			$this->location->setVenueId($newVenueId);
+			$this->location->update($this->mysqli);
 			 
 		
 			//select the user from mySQL and assert it was inserted properly
@@ -95,6 +96,8 @@
             public function tearDown()
             {
                 $this->location->delete($this->mysqli);
+		$this->venue->delete($this->mysqli);
+		$this->contact->delete($this->mysqli);
             }
         }
 ?>
