@@ -10,12 +10,14 @@
 		// variable to hold the mysqli objects
 		private $sqlLocation;
 		private $location;
+		private $contact;
+		private $venue;
             
 		// constant variables to reuse. set intergers($id, $VenueId) and string (boardLocations)
 		// state (member) variables
-		private $id; // this is assigned as -1 
 		private $boardLocation = "the board is valid";
-		private $venueId; //object
+		private $venueId;
+		private $contactId; 
 		
 		 
 		 // setup() is before *EACH test           
@@ -25,39 +27,68 @@
 			try
 			{
 				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
+				//insert the objects
+				//contact -- idcontact, company name, address1, address2, city, zip, nm, phone
+				$this->contact = new Contact(-1, "11 Online", "832 Madison NE", "", "Albuquerque", "87110", "NM", "505-363-4106", "josh@joshuatomasgarcia.com");
+				$this->contact->insert($this->mysqli);
+				//get contactid
+				$this->contactId = $this->contact->getIdcontact();
+
+				//venue -- idVenue, longitude, longitude, contactId
+				$this->venue = new Venue(-1, 35, 100, $this->contactId);
+				$this->venue->insert($this->mysqli);
+				//get contactid
+				$this->venueId = $this->venue->getIdVenue();
+				
+				//boardLocation -- id, boardLocation, venueId
+				$this->location = new BoardLocation(-1, "Satellite", $this->venueId);
+				$this->location->insert($this->mysqli);
 			}
 			catch(mysqli_sql_exception $exception)
 			{
 				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
-			//then assert, this was called ok() in qunit  
-		public function testGetLocationByBoardLocation()
+		//test that the objects were inserted correctly & that the the static methods return the correct data 
+		public function testGetBoardLocationById()
 		{
-			$this->$sqlLocation = Location::getLocationByBoardLocation($this->mysqli, $this->boardLocation);
-			$this->assertIdentical($this->location, $this->$sqlLocation[0]);
+			$this->sqlLocation = BoardLocation::getBoardLocationById($this->mysqli, $this->location->getId());
+			$this->assertIdentical($this->location, $this->sqlLocation);
 		}
-			//setup your expectations
-		public function testGetLocationByBoardLocationInvalid()
+		
+		public function testGetBoardLocationByIdInvalid()
 		{
 			$this->expectException("Exception");
-			@Board::getLocationByBoardLocation($this->mysqli, 0);
+			@Board::getBoardLocationById($this->mysqli, 0);
+		}
+		
+		public function testGetBoardLocationByVenueId()
+		{
+			$this->sqlLocation = BoardLocation::getBoardLocationByVenueId($this->mysqli, $this->venueId);
+			$this->assertIdentical($this->location, $this->sqlLocation);
+		}
+		
+		public function testGetBoardLocationByVenueIdInvalid()
+		{
+			$this->expectException("Exception");
+			@Board::getBoardLocationByVenueId($this->mysqli, 0);
 		}
      
 		public function testValidUpdateLocation()
 		{	
-			$newBoardLocation = "JB boards are better";
-			$newVenueId = "Just ask me and I'll tell you.";
+			
+			$newBoardLocation = "Flying Star";
+			$newVenueId = $this->venueId; //-- not testing this w/ new info for now b/c we would have to insert new Venue object
 			$this->location->setBoardLocation($newBoardLocation);
 			$this->location->setVenueId($newVenueId);
 			 
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlLocation = Location::getLocationByBoardLocation($this->mysqli, $this->boardLocation);
+			$this->sqlLocation = BoardLocation::getBoardLocationById($this->mysqli, $this->location->getId());
 		
 			// verify the BoardLocation and VenueId changed
-			$this->assertIdentical($this->sqlLocation[0]->getBoardLocation(), $newBoardLocation);
-			$this->assertIdentical($this->sqlLocation[0]->getVenueId(), $newVenuId);
+			$this->assertIdentical($this->sqlLocation->getBoardLocation(), $newBoardLocation);
+			$this->assertIdentical($this->sqlLocation->getVenueId(), $newVenuId);
             }
             
             // teardown

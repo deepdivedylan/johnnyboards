@@ -306,7 +306,7 @@
 		 * input: (pointer) to mysql
 		 * input: (int) id to search by
 		 * output: (arry of objects) board locations */
-		public static function getBoardLocationByVenueId(&$mysqli, $id)
+		public static function getBoardLocationByVenueId(&$mysqli, $venueId)
 		{
 			// check for a good mySQL pointer
 			if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")
@@ -325,7 +325,7 @@
 			}
 			
 			// bind parameters to the query template
-			$wasClean = $statement->bind_param("i", $id);
+			$wasClean = $statement->bind_param("i", $venueId);
 			if($wasClean === false)
 			{
 				throw(new Exception("Unable to bind paramenters."));
