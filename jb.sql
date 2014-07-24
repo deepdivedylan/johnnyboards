@@ -61,7 +61,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`board` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`board` (
-  `idboard` INT UNSIGNED NOT NULL,
+  `idboard` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `boardStatus` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`idboard`))
 ENGINE = InnoDB;
