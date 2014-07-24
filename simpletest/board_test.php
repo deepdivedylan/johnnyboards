@@ -32,7 +32,8 @@
             
 		public function testGetBoardsById()
 		{
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->board->getIdboard());
+			$id = $this->board->getIdboard();
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $id);
 			$this->assertIdentical($this->board, $this->sqlBoard);
 		}
 
@@ -44,12 +45,13 @@
      
 		public function testValidUpdateBoard()
 		{	
+			$id = $this->board->getIdboard();
 			$newStatus = "Fair";
 			$this->board->setBoardStatus($newStatus);
 			$this->board->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->board->getIdboard());
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $id);
 		
 			// verify the title and details changed
 			$this->assertIdentical($this->sqlBoard->getBoardStatus(), $newStatus);
