@@ -25,6 +25,12 @@
 			try
 			{
 				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
+				
+				//insert the object
+				//type -- idtype, name
+				$board = new Board(-1, "Good");
+				$board->insert($this->mysqli);
+				$boardId = $board->getIdboard();
 			}
 			catch(mysqli_sql_exception $exception)
 			{

@@ -2,19 +2,19 @@
 	class Type
 	{
 		// state (member) variables
-		private $id;
+		private $idtype;
 		private $name;
 		
 		/* constructor for a printer object
 		 * input: (int) new Id
 		 * input: (string) name
 		 * throws: when invalid input detected */
-		public function __construct($newId, $newName)
+		public function __construct($newIdtype, $newName)
 		{
 			try
 			{
 				// use the mutator methods since they have all input sanitization built in
-				$this->setId($newId);
+				$this->setId($newIdtype);
 				$this->setName($newName);
 				
 			}
@@ -28,30 +28,30 @@
 		/* accessor method for id
 		 * input: N/A
 		 * output: value of id */
-		public function getId()
+		public function getIdtype()
 		{
-		    return($this->id);
+		    return($this->idtype);
 		}
 	    
 		/* mutator method for id
 		 * input: new value of id
 		 * output: N/A */
-		public function setId($newId)
+		public function setIdtype($newIdtype)
 		{
 			// throw out obviously bad IDs 
-			if(is_numeric($newId) === false)
+			if(is_numeric($newIdtype) === false)
 			{
-				throw(new Exception("Invalid printer id detected: $newId is not numeric"));
+				throw(new Exception("Invalid printer id detected: $newIdtype is not numeric"));
 			}
 			// convert the ID to an integer 
-			$newId = intval($newId);
+			$newIdtype = intval($newIdtype);
 			// throw out negative IDs except -1, which is our "new" poster 
-			if($newId < -1)
+			if($newIdtype < -1)
 			{
-				throw(new Exception("Invalid poster id detected: $newId is less than -1"));
+				throw(new Exception("Invalid poster id detected: $newIdtype is less than -1"));
 			}
 		    
-			$this->id = $newId;
+			$this->idtype = $newIdtype;
 		}
 	    
 		/* accessor method for name
@@ -97,7 +97,7 @@
             }
             
             // a create a query template
-            $query = "INSERT INTO type (idtype, name) VALUES(?, ?)";
+            $query = "INSERT INTO type(idtype, name) VALUES(?, ?)";
             
             // prepare the query statement
             $statement = $mysqli->prepare($query);
@@ -107,7 +107,7 @@
             }
             
             // bind parameters to the query template
-            $wasClean = $statement->bind_param("is", $this->id, $this->name);
+            $wasClean = $statement->bind_param("is", $this->idtype, $this->name);
             if($wasClean === false)
             {
                 throw(new Exception("Unable to bind paramenters."));
@@ -124,7 +124,7 @@
             // reassign the id, grabbing it from mySQL
             try
             {
-                $this->setId($mysqli->insert_id);
+                $this->setIdtype($mysqli->insert_id);
             }
             catch(Exception $exception)
             {
@@ -161,7 +161,7 @@
             }
             
             // bind parameters to the query template
-            $wasClean = $statement->bind_param("i", $this->id);
+            $wasClean = $statement->bind_param("i", $this->idtype);
             if($wasClean === false)
             {
                 throw(new Exception("Unable to bind paramenters."));
@@ -227,7 +227,7 @@
 		 * input: (pointer) to mysql
 		 * input: (int) id to search by
 		 * output: (object) poster type */
-		public static function getPosterTypeById(&$mysqli, $id)
+		public static function getPosterTypeById(&$mysqli, $idtype)
 		{
 			// check for a good mySQL pointer
 			if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")
@@ -246,7 +246,7 @@
 			}
 			
 			// bind parameters to the query template
-			$wasClean = $statement->bind_param("i", $id);
+			$wasClean = $statement->bind_param("i", $idtype);
 			if($wasClean === false)
 			{
 				throw(new Exception("Unable to bind paramenters."));
