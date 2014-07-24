@@ -3,15 +3,10 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/client.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/client.php");
 	
 	class ClientTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlClient;
 		private $client;
@@ -23,29 +18,24 @@
              *input: (string) contract renew
              *input: (integer) client type
              *input: (string) contactId*/
-		private $id; // this is assigned as -1  
-		private $idclient = 7; 
-		private $contractStart = "this is a contract";
-		private $contractRenew= "This is renew";
+		private $idclient; // this is assigned as -1
+		private $contractStart = "12-12-2012";
+		private $contractRenew= "12-12-2013";
 		private $clientType = 10;
-		private $contactId= "this is an Id";
+		private $contactId; //object
 			
 		 
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->client = new Client (-1, $this->idclient, $this->contractStart, $this->contractRenew, $this->clientType,$this->contractId);			
-				$this->client->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  

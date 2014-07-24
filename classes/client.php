@@ -21,7 +21,7 @@
                 try
                 {
                     $this->setIdclient($newIdclient);
-                    $this->setCompanyName($newContractStart);
+                    $this->setContractStart($newContractStart);
                     $this->setContractRenew($newContractRenew);
                     $this->setClientType($newClientType);
                     $this->setContactId($newContactId);

@@ -3,44 +3,32 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/type.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/type.php");
 	
 	class TypeTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlType;
 		private $type;
             
-		// state (member) variables
-		private $id; // this is set to -1 
-		private $name;
-		
-		/* constructor for a printer object
+		/* state (member) variables
 		 * input: (int) new Id
 		 * input: (string) name
 		 * throws: when invalid input detected */
-					
+		private $id; // this is set to -1 
+		private $name;
 		 
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Type::getMysqli();
-				}
-				$this->type = new Type (-1, $this->name);			
-				$this->type->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  

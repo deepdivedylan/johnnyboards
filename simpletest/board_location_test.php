@@ -3,41 +3,32 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/board_location.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/board_location.php");
 	
 	class BoardLocationTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlLocation;
 		private $location;
             
 		// constant variables to reuse. set intergers($id, $VenueId) and string (boardLocations)
 		// state (member) variables
-		private $id = 7; // this is assigned as -1 
+		private $id; // this is assigned as -1 
 		private $boardLocation = "the board is valid";
-		private $venueId = 10;
+		private $venueId; //object
 		
 		 
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->location = new Location (-1, $this->boardLocation, $this->venueId);			
-				$this->location->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  

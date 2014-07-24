@@ -402,7 +402,7 @@
 		 * input: (pointer) to mysql
 		 * input: (int) id to search by
 		 * output: (array of objects) ads */
-		public static function getAdPlacementByClinetAndBoardId(&$mysqli, $clientId, $boardId)
+		public static function getAdPlacementByClientAndBoardId(&$mysqli, $clientId, $boardId)
 		{	
 			// check for a good mySQL pointer
 			if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")

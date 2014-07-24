@@ -3,15 +3,10 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/contact.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/contact.php");
 	
 	class ContactTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlContact;
 		private $contact;
@@ -29,11 +24,10 @@
              *input: (string) email */
 		 
 		//member variables
-	    private $id; // this is assigned as -1 
-            private $idcontact= 7;
+	    private $idcontact; // this is assigned as -1 
             private $companyName = "Flying Star";
             private $address1="832 Madison NE";
-            private $address2= "n/a";
+            private $address2= "";
             private $city="Albuquerque";
             private $zipcode="87110";
             private $state="NM";
@@ -45,20 +39,14 @@
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->contact = new Contact (-1, $this->idcontact, $this->companyName,
-				$this->address1, $this->address2,$this->city);
-				$this->zipcode, $this->phoneNumber,$this->email);
-				$this->contact->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  
@@ -77,7 +65,7 @@
 		public function testValidUpdateContact()
 		{	
 			$newIdContact = "JB contacts are better";
-			$newCompanyName 		 = "Just ask me and I'll tell you.";
+			$newCompanyName = "Just ask me and I'll tell you.";
 			$newAddress1 = "Just ask me and I'll tell you.";
 			$newAddress2= "Just ask me and I'll tell you.";
 			$newCity= "Just ask me and I'll tell you.";

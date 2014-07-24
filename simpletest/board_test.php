@@ -3,43 +3,35 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/job.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/board.php");
 	
-	class JBoardTest extends UnitTestCase
+	class BoardTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlBoard;
 		private $board;
             
 		// constant variables to reuse
 		private $idboard;
-		private $boardStatus = "CSS help for YOU";
+		private $boardStatus = "Good";
 		            
+		// setup() is before *EACH test  
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->job = new Job (-1, $this->userId, $this->title, $this->details);			
-				$this->job->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
-		}
+		}   
             
 		public function testGetBoardsByUserId()
 		{
-			$this->$sqlBoard = Job::getBoardsByUserId($this->mysqli, $this->userId);
+			$this->$sqlBoard = Board::getBoardsByUserId($this->mysqli, $this->userId);
 			$this->assertIdentical($this->job, $this->$sqlBoard[0]);
 		}
 

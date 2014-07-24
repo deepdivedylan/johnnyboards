@@ -3,15 +3,10 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/poster.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/poster.php");
 	
 	class PosterTest extends UnitTestCase
 	{
-		private $mysqli = null;
-            
 		// variable to hold the mysqli objects
 		private $sqlPoster;
 		private $poster;
@@ -24,29 +19,20 @@
 		
 		private $id; // this is assigned as -1 
 		private $posterType= 10;
-		private $contactId= 20;
-		
-		/* state (member) variables
-		 * input: (int) new Id
-		 * input: (int) posterType
-		 * input: (int) new contact id */
+		private $contactId; //object
 		
 					 
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->poster = new Poster (-1, $this->posterType, $this->contactId);			
-				$this->poster->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  

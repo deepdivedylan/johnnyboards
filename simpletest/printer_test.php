@@ -3,15 +3,10 @@
 	require_once("/usr/lib/php5/simpletest/autorun.php");
 	
 	// grab the functions under scrutiny
-	require_once("../php/printer.php");
-        
-	// grab the config file
-	require_once("/home/bradg/tutorconnect/config.php");
+	require_once("/var/www/html/php/classes/printer.php");
 	
 	class PrinterTest extends UnitTestCase
-	{
-		private $mysqli = null;
-            
+	{   
 		// variable to hold the mysqli objects
 		private $sqlPrinter;
 		private $printer;
@@ -27,29 +22,24 @@
 		 *
 		 * */
 		private $id;  // this is assigned as -1 
-		private $hoursOpen= "8am-5 pm";
-		private $longitude= "-77.037852";
-		private $latitude="38.898556";
-		private $areasCovered= "Santa Fe";
-		private $contactId=5;
+		private $hoursOpen = "8am-5pm";
+		private $longitude = "-77.037852";
+		private $latitude = "38.898556";
+		private $areasCovered = "Santa Fe";
+		private $contactId;
 		
 		
 		 // setup() is before *EACH test           
 		public function setUp()
 		{
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			try
 			{
-				if($this->mysqli === null)
-				{
-					$this->mysqli = Pointer::getMysqli();
-				}
-				$this->printer = new Printer (-1, $this->hoursOpen, $this->longitude,
-				$this->latitude, $this->areasCovered,$this->contactId);			
-				$this->printer->insert($this->mysqli);
+				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
 			}
 			catch(mysqli_sql_exception $exception)
 			{
-				echo "Unable to connect to mySQL: " . $exception->getMessage();
+				echo "unable to connect to mySQL: ". $exception->getMessage();
 			}
 		}
 			//then assert, this was called ok() in qunit  
