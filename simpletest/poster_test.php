@@ -19,7 +19,7 @@
 		
 		private $id; // this is assigned as -1 
 		private $posterType= 10;
-		private $contactId; //object
+		private $contact; //object
 		
 					 
 		 // setup() is before *EACH test           
@@ -38,8 +38,8 @@
 			//then assert, this was called ok() in qunit  
 		public function testGetPosterByPosterType()
 		{
-			$this->$sqlPoster = Poster::getPostersByPosterType($this->mysqli, $this->posterType);
-			$this->assertIdentical($this->poster, $this->$sqlPoster[0]);
+			$this->sqlPoster = Poster::getPostersByPosterType($this->mysqli, $this->posterType);
+			$this->assertIdentical($this->poster, $this->sqlPoster[0]);
 		}
 			//setup your expectations
 		public function testGetPosterByPosterTypeInvalid()
@@ -48,6 +48,30 @@
 			@Poster::getPostersByPosterType($this->mysqli, 0);
 		}
      
+		public function testGetPosterByContactId()
+		{
+			$this->sqlPoster = Poster::getPostersByContactId($this->mysqli, $this->contact->getIdcontact());
+			$this->assertIdentical($this->poster, $this->sqlPoster[0]);
+		}
+			//setup your expectations
+		public function testGetPosterByContactIdInvalid()
+		{
+			$this->expectException("Exception");
+			@Poster::getPostersByContactId($this->mysqli, 0);
+		}
+		
+		public function testGetPosterById()
+		{
+			$this->sqlPoster = Poster::getPosterById($this->mysqli, $this->poster->getId());
+			$this->assertIdentical($this->poster, $this->sqlPoster);
+		}
+			//setup your expectations
+		public function testGetPosterByIdInvalid()
+		{
+			$this->expectException("Exception");
+			@Poster::getPosterById($this->mysqli, 0);
+		}
+		
 		public function testValidUpdatePoster()
 		{	
 			$newPosterType = "JB posters are better";
@@ -57,11 +81,11 @@
 			$this->poster->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlPoster = Poster::getPosterByPosterType($this->mysqli, $this->posterType);
+			$this->sqlPoster = Poster::getPosterById($this->mysqli, $this->poster->getId());
 		
 			// verify the PosterType and ContactId changed
-			$this->assertIdentical($this->sqlPoster[0]->getPosterType(), $newPosterType);
-			$this->assertIdentical($this->sqlPoster[0]->getContactId(), $newContactId);
+			$this->assertIdentical($this->sqlPoster->getPosterType(), $newPosterType);
+			$this->assertIdentical($this->sqlPoster->getContactId(), $newContactId);
             }
             
             // teardown

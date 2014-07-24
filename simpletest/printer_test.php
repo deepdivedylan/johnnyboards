@@ -26,7 +26,7 @@
 		private $longitude = "-77.037852";
 		private $latitude = "38.898556";
 		private $areasCovered = "Santa Fe";
-		private $contactId;
+		private $contact;
 		
 		
 		 // setup() is before *EACH test           
@@ -43,43 +43,55 @@
 			}
 		}
 			//then assert, this was called ok() in qunit  
-		public function testGetPrintersByHoursOpen()
+		public function testGetPrintersById()
 		{
-			$this->$sqlPrinter = Printer::getPrintersByHoursOpen($this->mysqli, $this->hoursOpen);
-			$this->assertIdentical($this->printer, $this->$sqlPrinter[0]);
+			$this->sqlPrinter = Printer::getPrinterById($this->mysqli, $this->printer->getId());
+			$this->assertIdentical($this->printer, $this->sqlPrinter);
 		}
 			//setup your expectations
-		public function testGetPrintersByHoursOpenInvalid()
+		public function testGetPrinterByIdInvalid()
 		{
 			$this->expectException("Exception");
-			@Printer::getPrintersByHoursOpen($this->mysqli, 0);
+			@Printer::getPrintersById($this->mysqli, 0);
 		}
      
+		public function testGetPrintersByContactId()
+		{
+			$this->sqlPrinter = Printer::getPrinterByContactId($this->mysqli, $this->contact->getIdcontact());
+			$this->assertIdentical($this->printer, $this->sqlPrinter);
+		}
+			//setup your expectations
+		public function testGetPrinterByContactIdInvalid()
+		{
+			$this->expectException("Exception");
+			@Printer::getPrintersByContactId($this->mysqli, 0);
+		}
+		
 		public function testValidUpdatePrinter()
 		{	
 			$newHoursOpen = "JB printers are better";
-			$newLongitude = "Just ask me and I'll tell you.";
-			$newLatitude = "Just ask me and I'll tell you.";
+			$newLongitude = "876584";
+			$newLatitude = "-098798768756";
 			$newAreasCovered= "Just ask me and I'll tell you.";
-			$newContactId= "Just ask me and I'll tell you.";
+			$newContactId= "1";
 			
 			$this->printer->setHoursOpen($newHoursOpen);
 			$this->printer->setLongitude($newLongitude);
 			$this->printer->setLatitude($newLatitude);
 			$this->printer->setAreasCovered($newAreasCovered);
-			$this->printer->setContactId($newPrinterId);
+			$this->printer->setContactId($newContactId);
 			$this->printer->update($this->mysqli);
 			
 			
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlPrinter = Printer::getPrinterByHoursOpen($this->mysqli, $this->hoursOpen);
+			$this->sqlPrinter = Printer::getPrinterById($this->mysqli, $this->printer-getId());
 		
 			// verify the HoursOpen , Longitude, Latitude,AreasCovered ContactId changed
-			$this->assertIdentical($this->sqlPrinter[0]->getHoursOpen(), $newHoursOpen);
-			$this->assertIdentical($this->sqlPrinter[0]->getLongitude(), $newLongitude);
-			$this->assertIdentical($this->sqlPrinter[0]->getLatitude(), $newLatitude);
-			$this->assertIdentical($this->sqlPrinter[0]->getAreasCovered(), $newAreasCovered);
-			$this->assertIdentical($this->sqlPrinter[0]->getContactId(), $newContactId);
+			$this->assertIdentical($this->sqlPrinter->getHoursOpen(), $newHoursOpen);
+			$this->assertIdentical($this->sqlPrinter->getLongitude(), $newLongitude);
+			$this->assertIdentical($this->sqlPrinter->getLatitude(), $newLatitude);
+			$this->assertIdentical($this->sqlPrinter->getAreasCovered(), $newAreasCovered);
+			$this->assertIdentical($this->sqlPrinter->getContactId(), $newContactId);
             }
             
             // teardown

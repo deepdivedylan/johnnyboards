@@ -32,7 +32,6 @@
 				$this->board = new Board(-1, $this->boardStatus);
 				$this->board->insert($this->mysqli);
 				$this->idboard = $this->board->getIdboard();
-				echo $this->idboard;
 			}
 			catch(Exception $exception)
 			{

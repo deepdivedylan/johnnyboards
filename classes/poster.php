@@ -312,7 +312,7 @@
 		 * input: (pointer) to mysql
 		 * input: (int) poster id to search by
 		 * output: (array of objects) posters */
-		public static function getPosterByPosterType(&$mysqli, $posterType)
+		public static function getPostersByPosterType(&$mysqli, $posterType)
 		{
 			// check for a good mySQL pointer
 			if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")
@@ -365,7 +365,7 @@
 		 * input: (pointer) to mysql
 		 * input: (int) id to search by
 		 * output: (arry of objects) posters */
-		public static function getPosterByContactId(&$mysqli, $id)
+		public static function getPostersByContactId(&$mysqli, $id)
 		{
 			// check for a good mySQL pointer
 			if(is_object($mysqli) === false || get_class($mysqli) !== "mysqli")
