@@ -61,7 +61,7 @@
             /* accessor method for boardStatus
              * input: N/A
              * output: value of boardStatus */
-            public function getContractStart()
+            public function getBoardStatus()
             {
                 return($this->boardStatus);
             }
