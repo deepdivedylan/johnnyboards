@@ -31,6 +31,7 @@
 			try
 			{
 			$this->board->insert($this->mysqli);
+			$this->idboard = $this->board->getIdboard();
 			}
 			catch(Exception $exception)
 			{
@@ -57,7 +58,7 @@
 			$this->board->update($this->mysqli);
 		
 			//select the user from mySQL and assert it was inserted properly
-			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->board->getIdboard());
+			$this->sqlBoard = Board::getBoardById($this->mysqli, $this->idboard());
 		
 			// verify the title and details changed
 			$this->assertIdentical($this->sqlBoard->getStatus(), $newStatus);
