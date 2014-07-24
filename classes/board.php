@@ -238,7 +238,7 @@
                    }
                    
                    //create query template
-                   $query = "SELECT idboard, boardStatus FROM client WHERE idboard = ?";
+                   $query = "SELECT idboard, boardStatus FROM board WHERE idboard = ?";
                    
                    //prepare the query statement
                    $statement = $mysqli->prepare($query);
