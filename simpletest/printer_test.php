@@ -36,6 +36,14 @@
 			try
 			{
 				$this->mysqli = new mysqli("localhost","johnnyboards-dba","achemythratiopaganfacesoap","jb_posting");
+				
+				//insert the objects
+				
+				//contact -- idcontact, company name, address1, address2, city, zip, nm, phone
+				$this->contact = new Contact(-1, "11 Online", "832 Madison NE", "", "Albuquerque", "87110", "NM", "505-363-4106", "josh@joshuatomasgarcia.com");
+				$this->contact->insert($this->mysqli);
+				
+				$this->printer = new Printer(-1, $this->hoursOpen, $this->longitude, $this->latitude, $this->areasCovered, $this->contact->getIdcontact());
 			}
 			catch(mysqli_sql_exception $exception)
 			{
